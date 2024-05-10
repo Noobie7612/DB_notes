@@ -377,6 +377,7 @@ order by department_id;
 **Illegal Queries**
 
 ![Illegal queries 1](Illegal_1.png)
+<br>
 ![Illegal queries 2](Illegal_2.png)
 
 ### Restricting group results
@@ -412,3 +413,5 @@ from employees
 group by department_id;
 ```
 <br><br>
+
+## Section 6
