@@ -6,7 +6,7 @@
 
 To select the whole table
 ```sql
-Select * from employees
+select * from employees
 ```
 but you can replace the '*' it with whatever column name u need
 
@@ -66,7 +66,7 @@ from employees;
 
 ## Section 2
 
-### Selecting specific rows from a table
+### selecting specific rows from a table
 you can use the keyword 'Where' to select specific rows according to conditions you set yourself
 
 ```sql
@@ -128,22 +128,22 @@ Parentheses -> Arithmetic operators -> Concatenation operator -> Comparison cond
 The keyword 'order by' can be used to arrange the rows according to certain conditions you set yourself asscendingly or descendingly (the default is ascending tho)
 
 ```sql
-/*Order by descending order*/
+/*order by descending order*/
 select first_name , hire_date, last_name, manager_id, salary
 from employees
 order by salary;
 
-/*Order by column number (Salary column is 5th column, look at the table structure to make sure)*/
+/*order by column number (Salary column is 5th column, look at the table structure to make sure)*/
 select first_name , hire_date, last_name, manager_id, salary
 from employees
 order by 5 desc;
 
-/*Order by alias name*/
+/*order by alias name*/
 select first_name name , hire_date, last_name, manager_id, salary
 from employees
 order by name;
 
-/*Order by more than one column*/
+/*order by more than one column*/
 select first_name name , hire_date, last_name, manager_id, salary
 from employees
 order by name , salary;
@@ -154,7 +154,7 @@ order by name , salary;
 Ordering by multiple columns orders the rows by the first argument first (in the example above it's name) then if two rows have the same first value then the second argument is used
 
 **from slide 29 till the end isn't on the test 🤩**
-
+<br><br>
 ## Section 3
 
 ### Functions in SQL
@@ -203,7 +203,7 @@ from employees;
 |LPAD(salary,10,'*')                            |*****24000     |
 |RPAD(salary, 10, '*')                          |24000*****     |
 |REPLACE BLACK and BLUE('JACK and JUE','J','BL')|BLACK and BLUE |
-|TRIM('H' FROM 'HelloWorld')                    |elloWorld      |
+|TRIM('H' from 'HelloWorld')                    |elloWorld      |
 
 ```sql
 /*concat*/
@@ -243,7 +243,7 @@ select trim ('b' from 'blue')
 from dual
 ```
 
-> The dual in the last two examples can be used to SELECT a constant value and return that constant value.
+> The dual in the last two examples can be used to select a constant value and return that constant value.
 
 **Number Functions**
 
@@ -319,6 +319,96 @@ from employees
 
 ## Section 4
 
-Leaving it for now
-
+*nu uh*
+<br><br>
 ## Section 5
+
+### Group functions
+
+| Function  | Result    |
+| --------- | ----------|
+|avg (row_name)     |returns the average value of all the values in a row       |
+|max (row_name)     |returns the maximum value of all the values in a row       |
+|min (row_name)     |returns the minimum value of all the values in a row       |
+|sum (row_name)     |returns the sum of all the values in a row                 |
+|count (*)          |returns the number of rows in a table                      |
+|count (row_name)   |returns the number of rows with non-null values for expr   |
+
+```sql
+/*avg function with nvl*/
+select AVG(NVL(commission_pct, 0))
+from employees;
+```
+
+**Note that:**
+- These functions can't be used with normal fields in the select statement but can be used with each other unless you use `group by` clause
+```sql
+/*This is wrong*/
+select avg(salary), first_name 
+from employees;
+
+/*This is right*/
+select avg(salary), first_name
+from employees
+group by first_name;
+```
+- Count can be used with the distinct keyword
+- Group functions ignore null values in the column so we can use the NVL function to include them
+
+### Grouping the data
+
+You can divide rows in a table into smaller groups by using the `group by` clause and it can be used for column that aren't included in the select statement
+
+*Basically it groups a the result of a group function according to another row like in the first example*
+
+```sql
+/*normal group by*/
+select AVG(salary)
+from employees
+group by department_id ; /*Displays the average salary for each group with the same department_id number*/
+
+/*group by but with ordering*/
+select department_id, job_id, SUM(salary)
+from employees
+group by department_id, job_id
+order by department_id;
+```
+
+**Illegal Queries**
+
+![Illegal queries 1](Illegal_1.png)
+![Illegal queries 2](Illegal_2.png)
+
+### Restricting group results
+
+When you use the having clause, the Oracle server restricts
+groups as follows:
+1. Rows are grouped.
+2. The group function is applied.
+3. Groups matching the having clause are displayed.
+
+```sql
+/*Shows only the grouped data (by department_id ofc) that have max salary above 10000*/
+select department_id, MAX(salary)
+from employees
+group by department_id
+having MAX(salary)>10000 ;
+
+/*Shows only the grouped data that doesn't have job_id that include the word "REP" (by job_id ofc) w that have a sum of 13000 salary and orders it by sum of salary*/
+select job_id, SUM(salary) PAYROLL
+from employees
+WHERE job_id NOT LIKE '%REP%'
+group by job_id
+having SUM(salary) > 13000
+order by SUM(salary);
+```
+
+### Nesting gruop functions
+
+```sql
+/*calculates the average salaries for each group by department_id and then diplays the biggest one*/
+select MAX(AVG(salary))
+from employees
+group by department_id;
+```
+<br><br>
