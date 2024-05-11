@@ -415,3 +415,44 @@ group by department_id;
 <br><br>
 
 ## Section 6
+
+### Displaying data from multiple tables
+
+**"THIS THING GAVE ME AN ANEURISM" IS AN UNDERSTATEMNT TO SAY THE LEAST BUT I WILL TRY TO KEEP IT CIVIL**
+99% of this one is outdated commands that serve zero purpose (you know the rest) so we will only be talking about the on clause
+
+```sql
+/*Don't even dare to ask just know it joins the employees table (giving it the e inital) with the departments table (giving it the d inital) and now we should be able to access anything we want from both tables*/
+SELECT e.employee_id, e.last_name, e.department_id,
+d.department_id, d.location_id
+FROM employees e JOIN departments d
+ON (e.department_id = d.department_id);
+
+/*GOD DID*/
+SELECT employee_id, city, department_name
+FROM employees e
+JOIN departments d
+ON d.department_id = e.department_id
+JOIN locations l
+ON d.location_id = l.location_id;
+
+/*you should also be able to apply additional conditions however you want*/
+SELECT e.employee_id, e.last_name, e.department_id,
+d.department_id, d.location_id
+FROM employees e JOIN departments d
+ON (e.department_id = d.department_id)
+WHERE e.manager_id = 149 ; /*or AND e.manager_id = 149 */
+```
+
+**Self-Join**
+<br>
+![self join diagram](Self_Join.png)
+<br>
+
+```sql
+SELECT worker.last_name emp, manager.last_name mgr
+FROM employees worker JOIN employees manager
+ON (worker.manager_id = manager.employee_id);
+```
+## Section 7
+
