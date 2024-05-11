@@ -26,7 +26,7 @@ select last_name, salary, 12*(salary+100)
 from employees;
 ```
 
-> Note that NULL values aren't affected by any arithmetic operations
+> note that NULL values aren't affected by any arithmetic operations
 
 ### Column Alias
 
@@ -67,7 +67,7 @@ from employees;
 ## Section 2
 
 ### selecting specific rows from a table
-you can use the keyword 'Where' to select specific rows according to conditions you set yourself
+you can use the keyword 'where' to select specific rows according to conditions you set yourself
 
 ```sql
 select first_name , last_name, department_id
@@ -90,7 +90,7 @@ where hire_date between '01/01/2005' and '01/30/2005'
 |>=                     |Greater than or equal to|
 |<                      |Less than|
 |<=                     |Less than or equal to|
-|<>                     |Not equal to|
+|<>                     |not equal to|
 |between ... and ...    |Between two values (inclusive)|
 |in (x,y,z,...)         |Match any of the values in the set|
 |like ' '               |Match a character pattern|
@@ -121,7 +121,7 @@ where salary >=5000 and job_id like '%MAN%'
 ```
 
 **Rules of precedence**
-Parentheses -> Arithmetic operators -> Concatenation operator -> Comparison conditions -> IS [NOT] NULL, LIKE, [NOT] IN -> [NOT] BETWEEN -> Not equal to -> NOT logical condition -> AND logical condition -> OR logical condition
+Parentheses -> Arithmetic operators -> Concatenation operator -> Comparison conditions -> IS [not] NULL, LIKE, [not] in -> [not] BETWEEN -> not equal to -> not logical condition -> and logical condition -> OR logical condition
 
 ### Sorting the rows
 
@@ -179,7 +179,7 @@ There are two types of functions:
 | --------- | ----------|
 |LOWER('SQL Course')    |sql course |
 |UPPER('SQL Course')    |SQL COURSE |
-|INITCAP('SQL Course')  |Sql Course |
+|inITCAP('SQL Course')  |Sql Course |
 
 ```sql
 /*Upper and Lower functions*/
@@ -187,7 +187,7 @@ select upper(last_name) as "Last Name"
 from employees
 where lower(last_name)= lower('king');
 
-/*Initcap function*/
+/*initcap function*/
 select initcap(first_name) as "First Name" , initcap(last_name) as "Last Name"
 from employees;
 ```
@@ -196,10 +196,10 @@ from employees;
 
 | Function  | Result    |
 | --------- | ----------|
-|CONCAT('Hello', 'World')                       |HelloWorld     |
+|ConCAT('Hello', 'World')                       |HelloWorld     |
 |SUBSTR('HelloWorld',1,5)                       |Hello          |
 |LENGTH('HelloWorld')                           |10             |
-|INSTR('HelloWorld', 'W')                       |6              |
+|inSTR('HelloWorld', 'W')                       |6              |
 |LPAD(salary,10,'*')                            |*****24000     |
 |RPAD(salary, 10, '*')                          |24000*****     |
 |REPLACE BLACK and BLUE('JACK and JUE','J','BL')|BLACK and BLUE |
@@ -222,7 +222,7 @@ from employees
 select length (last_name)
 from employees
 
-/*INSTR (take 2 arguments)*/
+/*inSTR (take 2 arguments)*/
 select instr (first_name,'i')
 from employees
 
@@ -280,8 +280,8 @@ from employees;
 
 | Function  | Result    |
 | --------- | ----------|
-|MONTHS_BETWEEN |Number of months between two dates |
-|ADD_MONTHS     |Add calendar months to date        |
+|MonTHS_BETWEEN |Number of months between two dates |
+|ADD_MonTHS     |Add calendar months to date        |
 |NEXT_DAY       |Next day of the date specified     |
 |LAST_DAY       |Last day of the month              |
 |ROUND          |Round date                         |
@@ -340,7 +340,7 @@ select AVG(NVL(commission_pct, 0))
 from employees;
 ```
 
-**Note that:**
+**note that:**
 - These functions can't be used with normal fields in the select statement but can be used with each other unless you use `group by` clause
 ```sql
 /*This is wrong*/
@@ -398,7 +398,7 @@ having MAX(salary)>10000 ;
 /*Shows only the grouped data that doesn't have job_id that include the word "REP" (by job_id ofc) w that have a sum of 13000 salary and orders it by sum of salary*/
 select job_id, SUM(salary) PAYROLL
 from employees
-WHERE job_id NOT LIKE '%REP%'
+where job_id not LIKE '%REP%'
 group by job_id
 having SUM(salary) > 13000
 order by SUM(salary);
@@ -418,41 +418,140 @@ group by department_id;
 
 ### Displaying data from multiple tables
 
-**"THIS THING GAVE ME AN ANEURISM" IS AN UNDERSTATEMNT TO SAY THE LEAST BUT I WILL TRY TO KEEP IT CIVIL**
+**"THIS THinG GAVE ME AN ANEURISM" IS AN UNDERSTATEMNT TO SAY THE LEAST BUT I WILL TRY TO KEEP IT CIVIL**
 99% of this one is outdated commands that serve zero purpose (you know the rest) so we will only be talking about the on clause
 
 ```sql
 /*Don't even dare to ask just know it joins the employees table (giving it the e inital) with the departments table (giving it the d inital) and now we should be able to access anything we want from both tables*/
-SELECT e.employee_id, e.last_name, e.department_id,
+select e.employee_id, e.last_name, e.department_id,
 d.department_id, d.location_id
-FROM employees e JOIN departments d
-ON (e.department_id = d.department_id);
+from employees e join departments d
+on (e.department_id = d.department_id);
 
 /*GOD DID*/
-SELECT employee_id, city, department_name
-FROM employees e
-JOIN departments d
-ON d.department_id = e.department_id
-JOIN locations l
-ON d.location_id = l.location_id;
+select employee_id, city, department_name
+from employees e
+join departments d
+on d.department_id = e.department_id
+join locations l
+on d.location_id = l.location_id;
 
 /*you should also be able to apply additional conditions however you want*/
-SELECT e.employee_id, e.last_name, e.department_id,
+select e.employee_id, e.last_name, e.department_id,
 d.department_id, d.location_id
-FROM employees e JOIN departments d
-ON (e.department_id = d.department_id)
-WHERE e.manager_id = 149 ; /*or AND e.manager_id = 149 */
+from employees e join departments d
+on (e.department_id = d.department_id)
+where e.manager_id = 149 ; /*or and e.manager_id = 149 */
 ```
 
-**Self-Join**
+**Self-join**
 <br>
-![self join diagram](Self_Join.png)
+![self join diagram](Self_join.png)
 <br>
 
 ```sql
-SELECT worker.last_name emp, manager.last_name mgr
-FROM employees worker JOIN employees manager
-ON (worker.manager_id = manager.employee_id);
+select worker.last_name emp, manager.last_name mgr
+from employees worker join employees manager
+on (worker.manager_id = manager.employee_id);
 ```
+<br><br>
+
 ## Section 7
 
+### Subqueries
+
+There is two types of subqueries:
+- Single-row subquery
+- Multiple-row subquery
+
+They use the same comparison operators as the everythin else (refer to the table in whatever section it was it's 4:30 am I am not looking for it)
+
+```sql
+select last_name, job_id, salary
+from employees
+where job_id =
+(select job_id
+from employees
+where last_name = ‘Taylor’)
+and salary >
+(select salary
+from employees
+where last_name = ‘Taylor’);
+
+/*You can also use group functions in subqueries*/
+select last_name, job_id, salary
+from employees
+where salary =
+(select Min(salary)
+from employees);
+
+/*Here, the server executes the subqueries first then evaluates the having min(salary) expression*/
+select department_id, Min(salary)
+from employees
+group by department_id
+HAVinG Min(salary) >
+(select Min(salary)
+from employees
+where department_id = 50);
+```
+
+**Some things that you shouldn't do**
+
+```sql
+/*Single-row operator with multiple-row subquery*/
+select employee_id, last_name
+from employees
+where salary =
+(select Min(salary)
+from employees
+group by department_id);
+
+/*Subquery returns no rows because there is no employee named "Haas."*/
+select last_name, job_id
+from employees
+where job_id =
+(select job_id
+from employees
+where last_name = 'Haas');
+```
+
+### Multiple-Row Subqueries
+
+| Operator  | Meaning   |
+| --------- | ----------|
+|in     |Equal to any member in the list|
+|any    |Must be preceded by =, !=, >, <, <=, >=. Compares a value to each value in a list orreturned by a query. Evaluates to FALSE if thequery returns no rows                        |
+|all    |Must be preceded by =, !=, >, <, <=, >=. Compares a value to every value in a list or returned by a query. Evaluates to TRUE if the
+query returns no rows       |
+
+```sql
+/*Less than any of the queries returned means that it can be less than the greatest one*/
+select employee_id, last_name, job_id, salary
+from employees
+where salary < ANY
+(select salary
+from employees
+where job_id = 'IT_PROG')
+and job_id <> 'IT_PROG';
+
+/*Less than all of the queries returned means that it must be less than the smallest one*/
+select employee_id, last_name, job_id, salary
+from employees
+where salary < ALL
+(select salary
+from employees
+where job_id = 'IT_PROG')
+and job_id <> 'IT_PROG';
+```
+**A subquery can return NULL**
+
+```sql
+/*The subquery return NULL (Surprised?, you should be too.)*/
+select emp.last_name
+from employees emp
+where emp.employee_id not in
+(select mgr.manager_id
+from employees mgr);
+```
+<br><br>
+# Fin
